@@ -184,7 +184,6 @@ function crearCuenta() {
     const historialTransacciones = [];
 
     const existeEmailIngresado = users.filter(user => (user.email == email) ? true : false)
-    console.log(existeEmailIngresado[0]);
 
     if(existeEmailIngresado[0]){
         alert('El email ingresado ya existe, verifique si ya posee una cuenta o intente de nuevo con otro email')
@@ -385,7 +384,13 @@ function retirarDinero(user) {
     1. SI
     2. NO`
     ));
+
     const saldo = validarRequisitosTransaccion(user, tipoDeCuenta, menuIngresoEgreso, opcion);
+    
+    if(user.cuentas[tipoDeCuenta].saldo - saldo < 0){
+        alert('No tiene suficiente monto para realizar esta operacion');
+        retirarDinero(user);
+    }
 
     user.manejarDineroFisico(tipoDeCuenta, saldo, accion);
     menuDelUsuario(user);
@@ -680,18 +685,21 @@ function obtenerRequsitosTransaccion(user, tipoDeCuenta) {
 }
 
 function validarRequisitosTransaccion(user, tipoDeCuenta, callback, opcion) {
+    
+    const esOperacionTransferencia = (callback == menuIngresoEgreso) ? false : true;
+    const operacion = (esOperacionTransferencia === false) ? 'ingresar/retirar' : 'transferir';
 
     if(opcion !== 1 && opcion !== 2) menuDelUsuario(user);
     if(opcion === 2) return callback(user);
 
-    const saldo = parseInt(prompt('Ingrese la cantidad de dinero que desea transferir'));
+    const saldo = parseInt(prompt(`Ingrese la cantidad de dinero que desea ${operacion}`));
 
     if(saldo < 0){
         alert('Ingrese un valor correcto');
         menuTransferencia(user);
     }
 
-    if(callback == menuIngresoEgreso) return saldo; //verificamos si lo que desea hacer es una transaccion o solamente un ingreso o egreso de dinero
+    if(esOperacionTransferencia) return saldo; //verificamos si lo que desea hacer es una transaccion o solamente un ingreso o egreso de dinero
 
     if (user.cuentas[tipoDeCuenta].saldo < saldo) {
         alert('No fue posible realizar esta operacion, revise bien los datos ingresados');
