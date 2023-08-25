@@ -437,6 +437,11 @@ function transferirACuentaPropia(user) {
     ));
     const saldo = validarRequisitosTransaccion(user, tipoDeCuenta, menuTransferencia, opcion);
 
+    if(user.cuentas[tipoDeCuenta].saldo - saldo < 0){
+        alert('No tiene suficiente monto para realizar esta operacion');
+        retirarDinero(user);
+    }
+
     user.transferirDinero(tipoDeCuenta, cuentaDestino, saldo, user.email);
     menuDelUsuario(user);
 }
@@ -685,7 +690,7 @@ function obtenerRequsitosTransaccion(user, tipoDeCuenta) {
 }
 
 function validarRequisitosTransaccion(user, tipoDeCuenta, callback, opcion) {
-    
+
     const esOperacionTransferencia = (callback == menuIngresoEgreso) ? false : true;
     const operacion = (esOperacionTransferencia === false) ? 'ingresar/retirar' : 'transferir';
 
@@ -704,6 +709,11 @@ function validarRequisitosTransaccion(user, tipoDeCuenta, callback, opcion) {
     if (user.cuentas[tipoDeCuenta].saldo < saldo) {
         alert('No fue posible realizar esta operacion, revise bien los datos ingresados');
         callback(user);
+    }
+
+    if(user.cuentas[tipoDeCuenta].saldo - saldo < 0){
+        alert('No tiene suficiente monto para realizar esta operacion');
+        menuTransferencia(user);
     }
 
     return saldo;
