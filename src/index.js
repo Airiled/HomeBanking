@@ -409,7 +409,7 @@ function transferirACuentaPropia(user) {
         const isNotCuentaCorriente = (cuentaDestino === 1) ? 'Cuenta Corriente en Pesos' : 'Cuenta Corriente en Dolares';
         const isNotCajaDeAhorro = (cuentaDestino === 2) ? 'Caja de Ahorro en Dolares': 'Caja de Ahorro en Pesos';
 
-        if(cuentaDestino === 1){
+        if(cuentaDestino === 1 || cuentaDestino === 3){
             alert(`
             No posee una ${isNotCuentaCorriente} como para poder realizarle una transaccion 
             Puede abrir una desde la opcion Abrir nueva cuenta
