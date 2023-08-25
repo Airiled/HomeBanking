@@ -725,4 +725,4 @@ function informacionDelUsuario(user) {
 
 setTimeout(() => {
     menuInicial(); 
-}, 500);
+}, 1000);
